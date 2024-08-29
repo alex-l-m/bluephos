@@ -31,16 +31,19 @@ def calculate_ste(mol):
         return None
 
 
-def optimize(row, t_nn):
-    mol_id = row["ligand_identifier"]
-    z = row["z"]
-    ste = row["ste"]
+def optimize(row):
+    mol_id = row["mol_id"]
+    # Get ste, if it's there
+    try:
+        ste = row["ste"]
+    except KeyError:
+        ste = None
 
     # Log the values of z and ste for debugging
     logger.info(f"Processing molecule {mol_id} ...")
 
     # Skip processing based on conditions
-    if z is None or abs(z) >= t_nn or ste is not None:
+    if ste is not None:
         logger.info(f"Skipping xTB optimization on molecule {mol_id} based on z or t_ste conditions.")
         return row  # Return the row unchanged
 
@@ -95,9 +98,9 @@ def optimize(row, t_nn):
             return row  # Return the updated row
 
 
-def optimize_geometries(df: pd.DataFrame, t_nn: float) -> pd.DataFrame:
+def optimize_geometries(df: pd.DataFrame) -> pd.DataFrame:
     # Apply the optimize function to each row
-    df = df.apply(optimize, axis=1, t_nn=t_nn)
+    df = df.apply(optimize, axis=1)
 
     return df
 
@@ -105,9 +108,7 @@ def optimize_geometries(df: pd.DataFrame, t_nn: float) -> pd.DataFrame:
 OptimizeGeometriesTask = PipelineTask(
     "optimize_geometries",
     optimize_geometries,
-    context_kwargs={
-        "t_nn": "t_nn",
-    },
+    context_kwargs=dict(),
     batch_size=4,
     num_cpus=64,
 )
