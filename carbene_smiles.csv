@@ -1,0 +1,4 @@
+mol_id,smiles
+ATONAB,CC(C)N1C=CN2C1=[Ir]134(=C5N(C=CN5C(C)C)c5cc(C(F)(F)F)cc2c51)c1ccc(C(F)(F)F)cc1Oc1cccc([n+]13)Oc1cc(C(F)(F)F)ccc14
+CUYRAS,COc1cc2[n+]3c(c1)-n1c4c(OC)cccc4c4cc(OC)cc(c41)[Ir]314(=C3N(C=CN3C(C)C)c3cc(C(C)(C)C)cc(c31)N1C=CN(C(C)C)C=41)n1nc(C(F)(F)F)cc1-2
+EGUFEV,CC(C)N1C2=[Ir]345(=C6N(c7cc(C(C)(C)C)cc(c73)N2c2ncc(C(F)(F)F)cc21)c1ncc(C(F)(F)F)cc1N6C(C)C)c1cc(C(F)(F)F)ncc1Oc1cccc([n+]14)Oc1ccc(C(F)(F)F)nc15
