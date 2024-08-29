@@ -42,7 +42,7 @@ def get_dft_calculator(dft_package, n_cpus):
 
 # Process each row of the DataFrame to perform DFT calculations
 def process_dataframe(row, t_ste, dft_calculator):
-    mol_id = row["ligand_identifier"]
+    mol_id = row["mol_id"]
     ste = row["ste"]
     energy_diff = row["dft_energy_diff"]
 
@@ -51,7 +51,7 @@ def process_dataframe(row, t_ste, dft_calculator):
         return row
 
     if row["xyz"] not in ["failed", None]:
-        base_name = row["ligand_identifier"]
+        base_name = row["mol_id"]
     else:
         return row
 
