@@ -44,7 +44,11 @@ def get_dft_calculator(dft_package, n_cpus):
 def process_dataframe(row, t_ste, dft_calculator):
     mol_id = row["mol_id"]
     ste = row["ste"]
-    energy_diff = row["dft_energy_diff"]
+    # Get the dft singlet triplet gap if it's there
+    try:
+        energy_diff = row["dft_energy_diff"]
+    except KeyError:
+        energy_diff = None
 
     if ste is None or abs(ste) >= t_ste or energy_diff is not None:
         logger.info(f"Skipping DFT on molecule {mol_id} based on z or t_ste conditions.")
