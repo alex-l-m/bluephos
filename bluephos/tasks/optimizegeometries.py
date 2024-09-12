@@ -98,7 +98,7 @@ def optimize(row):
             return row  # Return the updated row
 
 
-def optimize_geometries(df: pd.DataFrame, t_nn: float) -> pd.DataFrame:
+def optimize_geometries(df: pd.DataFrame) -> pd.DataFrame:
     for col in ["xyz", "ste"]:
         if col not in df.columns:
             df[col] = None
@@ -112,9 +112,7 @@ def optimize_geometries(df: pd.DataFrame, t_nn: float) -> pd.DataFrame:
 OptimizeGeometriesTask = PipelineTask(
     "optimize_geometries",
     optimize_geometries,
-    context_kwargs={
-        "t_nn": "t_nn",
-    },
+    context_kwargs=dict(),
     batch_size=1,
     num_cpus=1,
 )
