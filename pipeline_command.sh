@@ -1,0 +1,1 @@
+tox -e run-pipeline -- --smiles ./carbene_smiles.csv --feature ./bluephos/parameters/element_features.csv --train ./bluephos/parameters/train_stats.csv --weight ./bluephos/parameters/full_energy_model_weights.pt -o . --set-config optimize_geometries.num_cpus=1 --set-config optimize_geometries.batch_size=1 --set-config dft_run.num_cpus=1
