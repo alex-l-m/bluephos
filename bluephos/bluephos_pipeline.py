@@ -8,7 +8,7 @@ from dplutils.pipeline.ray import RayStreamGraphExecutor
 from bluephos.tasks.generateligandtable import GenerateLigandTableTask
 from bluephos.tasks.nn import NNTask
 from bluephos.tasks.optimizegeometries import OptimizeGeometriesTask
-from bluephos.tasks.smiles2sdf import Smiles2SDFTask
+from bluephos.tasks.carbene_smiles2sdf import Smiles2SDFTask
 from bluephos.tasks.dft import DFTTask
 from bluephos.tasks.filter_pipeline import (
     FilterNNInTask,
@@ -116,11 +116,7 @@ def build_pipeline_graph(input_dir: str, ligand_smiles: str):
         list: A list of task tuples representing the pipeline graph.
     """
     full_pipeline = [
-        (GenerateLigandTableTask, Smiles2SDFTask),  # Generate ligands, then convert SMILES to SDF
-        (Smiles2SDFTask, NNTask),  # Use SMILES to run NN prediction
-        (NNTask, FilterNNOutTask),  # NN filter "out" goes to sink
-        (NNTask, FilterNNInTask),  # NN filter "in" continues to the next task
-        (FilterNNInTask, OptimizeGeometriesTask),  # Optimize geometries for filtered ligands
+        (Smiles2SDFTask, OptimizeGeometriesTask),  # Optimize geometries for filtered ligands
         (OptimizeGeometriesTask, FilterXTBOutTask),  # XTB filter "out" goes to sink
         (OptimizeGeometriesTask, FilterXTBInTask),  # XTB filter "in" continues to the next task
         (FilterXTBInTask, DFTTask),  # Run DFT calculation for filtered ligands
@@ -128,11 +124,8 @@ def build_pipeline_graph(input_dir: str, ligand_smiles: str):
         (DFTTask, FilterDFTInTask),  # DFT filter "in" could be processed further
     ]
 
-    if ligand_smiles:
-        return full_pipeline[1:]  # from NNTask (Case 1: Input as ligand SMILES CSV file)
-
     if input_dir:
-        return full_pipeline[2:]  # from Smiles2SDFTask (Case 2: Use parquet files for rerun)
+        return full_pipeline[1:]  # from Smiles2SDFTask (Case 2: Use parquet files for rerun)
 
     return full_pipeline  # from GenerateLigandTableTask (Case 3: Input as halides and acids CSV files)
 
