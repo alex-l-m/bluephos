@@ -1,14 +1,14 @@
-import os
 import shutil
+import os
 from pathlib import Path
 
 from ase.calculators.orca import ORCA, OrcaProfile
 from tblite.ase import TBLite
 
+
 # ----------------------------
 # TBLite (in-memory calculator)
 # ----------------------------
-
 
 def _tblite_setup(atoms, multiplicity: int) -> None:
     """Attach a TBLite calculator with a fixed multiplicity."""
@@ -38,9 +38,6 @@ end
 %maxcore 3000
 """
 
-_ORCA_PROFILE = OrcaProfile(command=str(Path(os.environ["EBROOTORCA"]) / "orca"))
-
-
 def _orca_setup(atoms, multiplicity: int) -> None:
     geometry_name = atoms.info["name"]
     if multiplicity == 1:
@@ -52,18 +49,19 @@ def _orca_setup(atoms, multiplicity: int) -> None:
     run_dir = Path("orca_runs") / str(job_id)
     # Delete the run directory if it already exists
     if run_dir.exists():
-        shutil.rmtree(run_dir)  # deletes dir and all contents
+        shutil.rmtree(run_dir)   # deletes dir and all contents
     run_dir.mkdir(parents=True)
 
+    orca_profile = OrcaProfile(command=str(Path(os.environ["EBROOTORCA"]) / "orca"))
+
     atoms.calc = ORCA(
-        profile=_ORCA_PROFILE,
+        profile=orca_profile,
         directory=str(run_dir),
         charge=0,
         mult=multiplicity,
         orcasimpleinput=_ORCA_SIMPLEINPUT,
         orcablocks=_ORCA_BLOCKS,
     )
-
 
 def orca_singlet_setup(atoms) -> None:
     """ORCA single-point setup for a singlet (multiplicity=1)."""
