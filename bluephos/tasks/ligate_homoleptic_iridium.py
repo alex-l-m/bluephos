@@ -1,8 +1,9 @@
 import pandas as pd
 from dplutils.pipeline import PipelineTask
-from octahedral_embed import ligate
 from rdkit import Chem
 from rdkit.Chem import AddHs, AllChem
+
+from octahedral_embed import ligate
 
 
 def _ligate_row(row: pd.Series) -> pd.Series:

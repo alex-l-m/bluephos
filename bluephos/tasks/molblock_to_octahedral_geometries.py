@@ -1,11 +1,14 @@
 import io
 
-import ase.io
 import pandas as pd
-from ase import Atoms
 from dplutils.pipeline import PipelineTask
-from octahedral_embed import octahedral_embed
 from rdkit import Chem
+
+from ase import Atoms
+import ase.io
+
+from octahedral_embed import octahedral_embed
+
 
 ISOMERS = ("fac", "mer")
 
@@ -58,7 +61,7 @@ def molblock_to_octahedral_geometries(df: pd.DataFrame) -> pd.DataFrame:
                 continue
 
             try:
-                mol = Chem.Mol(mol0)  # copy
+                mol = Chem.Mol(mol0)       # copy
                 mol.RemoveAllConformers()  # start clean
                 mol.SetProp("_Name", new["isomer_identifier"])
 
